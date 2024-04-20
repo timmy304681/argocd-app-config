@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      
+    - uses: azure/k8s-lint@v1
+      id: lint
+      with:
+        manifests: |
+            dev/deployment.yaml
+            dev/service.yaml
+            prod/deployment.yaml
+            prod/service.yaml
+        kubeconformOpts: -summary
+
+    - name: 'Yamllint'
+      uses: karancode/yamllint-github-action@master
+      id: yamllint
+      with:
+        yamllint_file_or_dir: 'dev'
+        yamllint_strict: false
+        yamllint_comment: true
+      env:
+        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+ 
+    - uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        LINT: "${{ steps.yamllint.outputs.yamllint_output }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Yaml Lint Success
+  
+          \`\`\`\n
+          ${process.env.LINT}
+          \`\`\`
+            
+          *Pusher: @timmy304681, Action: \\\`pull_request\\\`, Workflow: \\\`CI/CD Pipeline\\\`*`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+                      
+        
