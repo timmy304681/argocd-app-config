@@ -24,24 +24,21 @@ jobs:
             prod/service.yaml
         kubeconformOpts: -summary
 
-    - name: 'Kustomize Build'
-      id : kustomize
-      uses: karancode/kustomize-github-action@master
+    - name: 'Yamllint'
+      uses: karancode/yamllint-github-action@master
+      id: Yamllint
       with:
-        kustomize_version: '3.0.0'
-        kustomize_build_dir: 'dev'
-        kustomize_comment: true
-        kustomize_output_file: "gitops/rendered.yaml"
-        kustomize_build_options: "--load_restrictor none"
-        enable_alpha_plugins: true
+        yamllint_file_or_dir: 'dev'
+        yamllint_strict: false
+        yamllint_comment: true
       env:
-        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
  
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       env:
-        LINT: "${{ steps.kustomize.kustomize_build_output  }}"
+        LINT: "${{ steps.Yamllint.yamllint_output   }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
