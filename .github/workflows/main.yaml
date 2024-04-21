@@ -32,7 +32,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const output = `\`${{ steps.fmt.outcome }}\`
+          const output = `#### K8S Lint 🖌\`${{ steps.fmt.outcome }}\`
 
           #### `${{ steps.k8s-lint.outcome }}\`
           \`\`\`\n
@@ -40,8 +40,8 @@ jobs:
           \`\`\`
 
 
-          </details>
           *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
