@@ -83,7 +83,7 @@ k8s repository :https://github.com/timmy304681/argocd-app-config
 ![alt text](images/image-10.png)
 ## GitOps
 GitOps就是想解決以上傳統CI/CD 部署的問題:
-1. CI/CD Pipeline 內不進行任何部署動作，而是由ArgoCD去偵測git變化，
+1. CI/CD Pipeline 內不進行任何部署動作，而是由ArgoCD去偵測git變化，且ArgoCD是部屬於K8s cluster內，因此安全且有效率
 2. k8s的token不需外流，只要不外流就沒有其他途徑可以更動k8s
 3. 代表開發人員能對k8s有異動，唯一途徑就必須要異動git，就能有版本控制保障
 ![alt text](images/image-11.png)
