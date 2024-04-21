@@ -23,5 +23,3 @@ spec:
           env:
             - name: SERVER_PORT
               value: "3000"
-            
-
