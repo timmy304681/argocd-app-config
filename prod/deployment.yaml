@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-web-deployment
+  labels:
+    app: sre-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sre-web
+  template:
+    metadata:
+      labels:
+        app: sre-web
+    spec:
+      containers:
+        - name: sre-web
+          image: timmy304681/sre-web
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SERVER_PORT
+              value: "3000"
+            
+
