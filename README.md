@@ -72,3 +72,21 @@ k8s repository :https://github.com/timmy304681/argocd-app-config
 ![alt text](images/image-8.png)
 ![alt text](images/image-9.png)
 
+# Gitlab / github action 也是把部署檔案 git 化，那就是 gitops 了嗎？跟 ArgoCD 有什麼不同？
+## CI/CD 部署
+傳統的CI/CD 部署，觸發條件會是pull request被merge等一些條件，會觸發後續pipeline，讓Gitlab / github action 能直接對 Kubernetes Cluster 進行操控，但有幾個大問題是:
+1. 並沒有辦法控管 Kubernetes 正在運行的資源狀態 
+2. 對於k8s cluster來說，Gitlab / github action 都是屬於第三方部屬，因此需要有KUBECONFIG (如token)的散佈
+3. k8s cluster的連線資訊就會被暴露在外
+4. 因為只要token暴露在外，就難以確保 k8s 內運行的狀態與描述的資源檔案 (Yaml/Helm Chart) 一致
+
+![alt text](images/image-10.png)
+## GitOps
+GitOps就是想解決以上傳統CI/CD 部署的問題:
+1. CI/CD Pipeline 內不進行任何部署動作，而是由ArgoCD去偵測git變化，
+2. k8s的token不需外流，只要不外流就沒有其他途徑可以更動k8s
+3. 代表開發人員能對k8s有異動，唯一途徑就必須要異動git，就能有版本控制保障
+![alt text](images/image-11.png)
+
+# 參考:
+https://www.hwchiu.com/docs/2020/gitops
