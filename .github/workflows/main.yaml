@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop, main ]
 
@@ -32,15 +32,14 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const output = `#### K8S Lint 🖌\`${{ steps.fmt.outcome }}\`
-
-          #### `${{ steps.k8s-lint.outcome }}\`
-          \`\`\`\n
+          const output = `#### K8S Lint 🖌\\\`\\\`
+  
+          #### \\\`success\\\`
+          \\\`\\\`\\\`\\\n
           ${process.env.LINT}
-          \`\`\`
-
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          \\\`\\\`\\\`
+            
+          *Pusher: @timmy304681, Action: \\\`pull_request\\\`, Working Directory: \\\`\\\`, Workflow: \\\`CI/CD Pipeline\\\`*`;
           
           github.rest.issues.createComment({
             issue_number: context.issue.number,
