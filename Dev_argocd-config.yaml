@@ -12,7 +12,7 @@ spec:
     path: dev
   destination: 
     server: https://kubernetes.default.svc
-    namespace: Dev_SRE_web
+    namespace: dev-sre-web
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
