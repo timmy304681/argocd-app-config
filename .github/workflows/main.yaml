@@ -26,7 +26,7 @@ jobs:
 
     - name: 'Yamllint'
       uses: karancode/yamllint-github-action@master
-      id: Yamllint
+      id: yamllint
       with:
         yamllint_file_or_dir: 'dev'
         yamllint_strict: false
@@ -38,18 +38,17 @@ jobs:
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       env:
-        LINT: "${{ steps.Yamllint.yamllint_output   }}"
+        LINT: "${{ steps.yamllint.outputs.yamllint_output }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const output = `#### K8S Lint 🖌\\\`\\\`
+          const output = `#### Yaml Lint Success
   
-          #### \\\`success\\\`
           \`\`\`\n
           ${process.env.LINT}
           \`\`\`
             
-          *Pusher: @timmy304681, Action: \\\`pull_request\\\`, Working Directory: \\\`\\\`, Workflow: \\\`CI/CD Pipeline\\\`*`;
+          *Pusher: @timmy304681, Action: \\\`pull_request\\\`, Workflow: \\\`CI/CD Pipeline\\\`*`;
           
           github.rest.issues.createComment({
             issue_number: context.issue.number,
