@@ -1,0 +1,24 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      
+    - uses: azure/k8s-lint@v1
+      with:
+        manifests: |
+            dev/deployment.yml
+            dev/service.yml
+            prod/deployment.yml
+            prod/service.yml
+        kubeconformOpts: -summary
+                  
+    
